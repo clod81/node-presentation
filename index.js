@@ -1,9 +1,19 @@
-http = require ('http');
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
-http.createServer(function(req, res){ // CALLBACK
-  console.log("a request just arrived!");
-  res.writeHead(200, {"ContentType": "text/plain"});
-  res.end("Hi there!");
-}).listen(3000, '127.0.0.1');
+app.get('/', function(req, res){
+  res.sendfile('index.html');
+});
 
-console.log("I am running now");
+io.on('connection', function(socket){
+  console.log("some sockets connected");
+  socket.on('i_am_here', function(here){
+    console.log("some socket said it is here");
+    io.emit('welcome', "you are connected now");
+  });
+});
+
+http.listen(3000, function(){
+  console.log('listening on *:3000');
+});
