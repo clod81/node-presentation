@@ -7,10 +7,8 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-  console.log("some sockets connected");
-  socket.on('i_am_here', function(here){
-    console.log("some socket said it is here");
-    io.emit('welcome', "you are connected now");
+  socket.on('chat message', function(msg){
+    io.emit('chat message', msg);
   });
 });
 
